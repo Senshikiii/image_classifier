@@ -30,8 +30,8 @@ test_dataloader = DataLoader(test_data, batch_size=64, shuffle=False)
 class NeuralNetwork(nn.Module):  # i mean it's jus a class 
     def __init__(self): # we pretty much put all our layers here
         super().__init__()  # this thing runs pytorch's setup before our setup runs
-        self.flatten = Flatten() # stretches the img grid into a long line of numbers
-        self.layers = Sequential(
+        self.flatten = nn.Flatten() # stretches the img grid into a long line of numbers
+        self.layers = nn.Sequential(
             nn.Linear(28*28, 512),
             nn.ReLU(),
             nn.Linear(512, 512),
@@ -39,8 +39,8 @@ class NeuralNetwork(nn.Module):  # i mean it's jus a class
             nn.Linear(512, 10), 
         )
     def forward(self, x): # x is the img input btw
-    x = self.flatten(x)
-    return self.layers(x)
+        x = self.flatten(x)
+        return self.layers(x)
 
 model = NeuralNetwork()
 
