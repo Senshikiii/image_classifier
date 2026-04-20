@@ -25,7 +25,9 @@ test_data = datasets.MNIST(
 train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
 
 # don't shuffle so the results will be consistent
+# it'll be easy to edit stuff if the configs are at the top
 test_dataloader = DataLoader(test_data, batch_size=64, shuffle=False)
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)  
 
 class NeuralNetwork(nn.Module):  # i mean it's jus a class 
     def __init__(self): # we pretty much put all our layers here
@@ -42,12 +44,38 @@ class NeuralNetwork(nn.Module):  # i mean it's jus a class
         x = self.flatten(x)
         return self.layers(x)
 
-model = NeuralNetwork()
-
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
+model = NeuralNetwork().to(device)
+print(model)
+# 1e-3 --> 0.001
+learning_rate = 1e-3 
+batch_size 64
+epochs = 5
+
+loss_fn = nn.CrossEntropyLoss()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # why did I choose to use ReLU?? it's bcz sigmoid squishes everything btw 0 and 1, which causes a prob called vanishing gradients in deep networks, the nudges during backprop get tiny by the time they reach the early layers that those weghts barely update yadayayada
+# we can use CrossEntropyLoss cuz instead of squaring it just measures how far the conf scroes are from the org answers, smarter ig? (uses a formula btw)
+# optimizer is the thing which nudges the weights
+# SGD, stochastic gradient descent, lr = learning rate + how big it is
+# each epochs consists of two things, training loops and testing loops/validation loop
 
