@@ -55,13 +55,10 @@ batch_size = 64
 epochs = 5
 
 
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)  
-loss_fn = nn.CrossEntropyLoss()
-
 def training_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     model.train()
-    for batch, (X, y) item in enumerate(dataloader):
+    for batch, (X, y) in enumerate(dataloader):
         pred = model(X)
         loss = loss_fn(pred, y)
         #figures out how much each weight contributed to the loss
@@ -89,20 +86,23 @@ def test_loop(dataloader, model, loss_fn):
 
     test_loss /= num_batches
     correct /= size
-          print(f"Test error: \n Accuracy: {(100*correct}:>0.1f)%, Avg loss: {test_loss:>8f} \n")
+    print(f"Test error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+
+
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+
+epochs = 14
+for t in range(epochs):
+    print(f"Epoch + {t+1} \n---------------------------")
+    training_loop(train_dataloader, model, loss_fn, optimizer)
+    test_loop(test_dataloader, model, loss_fn)
+    print("Done")
 
 
 
 # btw pred = model snippet does the forward pass thing, loss function does its job
-
-
-
-
-
-
-
-
-
 
 # why did I choose to use ReLU?? it's bcz sigmoid squishes everything btw 0 and 1, which causes a prob called vanishing gradients in deep networks, the nudges during backprop get tiny by the time they reach the early layers that those weghts barely update yadayayada
 # we can use CrossEntropyLoss cuz instead of squaring it just measures how far the conf scroes are from the org answers, smarter ig? (uses a formula btw)
