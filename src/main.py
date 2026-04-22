@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-
+import torchvision.models as models
 from torch.utils.data import DataLoader
 
 from torchvision import datasets
@@ -59,6 +59,7 @@ def training_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     model.train()
     for batch, (X, y) in enumerate(dataloader):
+        X, y = X.to(device), y.to(device)
         pred = model(X)
         loss = loss_fn(pred, y)
         #figures out how much each weight contributed to the loss
@@ -80,6 +81,7 @@ def test_loop(dataloader, model, loss_fn):
     test_loss, correct = 0, 0
     with torch.no_grad():
         for X, y in dataloader:
+            X, y = X.to(device), y.to(device)
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()
@@ -99,6 +101,12 @@ for t in range(epochs):
     training_loop(train_dataloader, model, loss_fn, optimizer)
     test_loop(test_dataloader, model, loss_fn)
     print("Done")
+
+#saving and loading the model
+
+torch.save(model.state_dict(), 'model_weights.pth')
+
+
 
 
 
