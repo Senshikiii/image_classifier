@@ -24,7 +24,17 @@ random.shuffle(dog_files)
 
 
 def split_and_copy(files, src, train_dst, test_dst, ratio=0.8):
-    files = [f for f in files if f.lower().endswith((".jpg", ".jpeg", ".png",))]
+    files = [
+        f
+        for f in files
+        if f.lower().endswith(
+            (
+                ".jpg",
+                ".jpeg",
+                ".png",
+            )
+        )
+    ]
     split = int(len(files) * ratio)
     for f in files[:split]:
         shutil.copy(os.path.join(src, f), os.path.join(train_dst, f))
